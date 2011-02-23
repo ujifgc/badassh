@@ -1,0 +1,6 @@
+SSH client application for bada platform uses the secure shell protocol to connect to a remote computer. SSH protocol and terminal emulation are based on PuTTY,  free and open source terminal emulator. Monospace font used is Liberation Mono truetype font.
+
+Free version features:
+- Supports 3DES, AES, Arcfour, Blowfish, DES
+- Public-key authentication support
+- Emulates most xterm control sequences
