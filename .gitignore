@@ -1,0 +1,6 @@
+.Target-Debug
+.Target-Release
+DebugInfo
+manifest.xml
+signature.xml
+SSHBada.htb

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Application>
+    <Entry>SSHBada</Entry>
+    <Name>
+        <English>SSH client</English>
+        <rus-RU>SSH клиент</rus-RU>
+    </Name>
+    <Vendor>ujifgc</Vendor>
+    <Description/>
+    <Icons>
+        <MainMenu>badassh.png<Type1>badassh.png</Type1>
+            <Type2/>
+        </MainMenu>
+        <Setting/>
+        <Ticker/>
+        <QuickPanel/>
+        <LaunchImage>Splash.png<Type1>Splash.png</Type1>
+            <Type2/>
+        </LaunchImage>
+    </Icons>
+    <AutoScaling>
+        <Enabled>false</Enabled>
+    </AutoScaling>
+</Application>
