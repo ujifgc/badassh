@@ -2,6 +2,7 @@
 #define _FORM1_H_
 
 #include <FBase.h>
+#include <FApp.h>
 #include <FUi.h>
 #include <FIo.h>
 

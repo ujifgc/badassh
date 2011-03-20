@@ -9,6 +9,7 @@ extern "C" {
 #include "badanet.h"
 
 using namespace Osp::Base;
+using namespace Osp::App;
 using namespace Osp::Ui;
 using namespace Osp::Io;
 using namespace Osp::Ui::Controls;
@@ -23,6 +24,7 @@ int screen_width = 480, screen_height = 800;
 
 unicode_data ucsdata;
 void init_fonts(int, int);
+extern "C" void logerror(const char *format, ...);
 
 Config cfg;
 Terminal *term = 0;
@@ -102,7 +104,7 @@ result Form1::OnInitializing(void) {
 
 	style = GetFormStyle();
 	ShowSoftkey(SOFTKEY_0, false);
-	SetOrientation(ORIENTATION_PORTRAIT);
+	SetOrientation(ORIENTATION_AUTOMATIC);
 
 	scrollPt = Point(0,0);
 	dragStart = Point(-1, -1);
@@ -140,18 +142,18 @@ result Form1::OnTerminating(void) {
 void Form1::OnActionPerformed(const Osp::Ui::Control& source, int actionId) {
 	switch (actionId) {
 	case ID_BUTTON_EDITFIELD_DONE: {
-		if (!term || !ldisc)
-			break;
+		if (!term || !ldisc) break;
 		char buf[2] = { 0x09, 0x00 };
 		term_nopaste(term);
 		term_seen_key_event(term);
 		ldisc_send(ldisc, buf, 1, 1);
 		break;
 	}
-	case ID_BUTTON_EDITFIELD_CANCEL:
+	case ID_BUTTON_EDITFIELD_CANCEL: {
 		typing = false;
 		pScroll->CloseOverlayWindow();
 		break;
+	}
 	case ID_SOFTKEY0: {
 		ShowSoftkey(SOFTKEY_0, false);
 		if (!skynet->IsActive()) {
@@ -159,21 +161,20 @@ void Form1::OnActionPerformed(const Osp::Ui::Control& source, int actionId) {
 			MessageBox *mb = new MessageBox;
 			mb->Construct(L"Connection request", L"Engage Wi-Fi module?", MSGBOX_STYLE_OKCANCEL);
 			mb->ShowAndWait(res);
+			delete mb;
 			if (res == MSGBOX_RESULT_OK) {
 				result r = skynet->ConstructConnection(true);
 				if (E_SUCCESS == r) {
 					const char *msg = "Wi-Fi module engaged\n";
 					term_data_untrusted(term, msg, strlen(msg));
 				}
-				delete mb;
 			} else {
-				ShowSoftkey(SOFTKEY_0, true);
-				delete mb;
+				free_backend();
+				Osp::App::Application::GetInstance()->Terminate();
 				break;
 			}
 		}
-		if (back)
-		free_backend();
+		if (back) free_backend();
 		for (int i = 0; backends[i].backend != NULL; i++) {
 			if (backends[i].protocol == be_default_protocol) {
 				back = backends[i].backend;
@@ -187,10 +188,11 @@ void Form1::OnActionPerformed(const Osp::Ui::Control& source, int actionId) {
 	}
 	case ID_SOFTKEY1:
 	break;
-	case ID_OPTIONKEY:
-	pOptions->SetShowState(true);
-	pOptions->Show();
-	break;
+	case ID_OPTIONKEY: {
+		pOptions->SetShowState(true);
+		pOptions->Show();
+		break;
+	}
 	case ID_OPTIONMENU_OPTIONS: {
 		optionsForm->LoadConfig(&cfg);
 		mainFrame->SetCurrentForm(*optionsForm);
@@ -220,10 +222,8 @@ void Form1::OnTouchLongPressed(const Osp::Ui::Control &source, const Osp::Graphi
 void Form1::OnTouchMoved(const Osp::Ui::Control &source, const Osp::Graphics::Point &currentPosition,
 		const Osp::Ui::TouchEventInfo &touchInfo) {
 	scrollPt.y = dragStart.y + touchPt.y - currentPosition.y;
-	if (scrollPt.y < 0)
-		scrollPt.y = 0;
-	if (scrollPt.y > screen_height - viewPort.height)
-		scrollPt.y = screen_height - viewPort.height;
+	if (scrollPt.y < 0) scrollPt.y = 0;
+	if (scrollPt.y > screen_height - viewPort.height) scrollPt.y = screen_height - viewPort.height;
 	RequestRedraw(true);
 }
 
@@ -237,7 +237,7 @@ void Form1::OnTouchReleased(const Osp::Ui::Control &source, const Osp::Graphics:
 		const Osp::Ui::TouchEventInfo &touchInfo) {
 	dragStart = Point(-1, -1);
 	Point delta = currentPosition - touchPt;
-	if (delta.x * delta.x + delta.y * delta.y < 400) {
+	if (delta.x * delta.x + delta.y * delta.y < 400 && back && back->sendok(backhandle)) {
 		typing = true;
 		pEdit->ShowKeypad();
 	}
@@ -285,8 +285,7 @@ void Form1::OnTextValueChangeCanceled(const Osp::Ui::Control& source) {
 result Form1::OnDraw() {
 	pEdit->SetShowState(typing);
 
-	if (!pShadow)
-		return E_FAILURE;
+	if (!pShadow) return E_FAILURE;
 	Canvas *pCanvas = GetCanvasN();
 
 	pCanvas->Copy(Point(0, 0), *pShadow, Rectangle(scrollPt.x, scrollPt.y, viewPort.width, viewPort.height));
@@ -347,17 +346,13 @@ void Form1::OnOrientationChanged(const Osp::Ui::Control &source, Osp::Ui::Orient
 void Form1::OnTimerExpired(Timer &timer) {
 	long next;
 	started = false;
-	if (run_timers(timing_next_time, &next))
-		timer_change_notify(next);
+	if (run_timers(timing_next_time, &next)) timer_change_notify(next);
 }
 
 void Form1::SetTimer(long ticks) {
-	if (!pTimer)
-		return;
-	if (started && E_SUCCESS == pTimer->Cancel())
-		started = false;
-	if (E_SUCCESS == pTimer->Start(ticks))
-		started = true;
+	if (!pTimer) return;
+	if (started && E_SUCCESS == pTimer->Cancel()) started = false;
+	if (E_SUCCESS == pTimer->Start(ticks)) started = true;
 }
 
 void Form1::Redraw() {
@@ -367,22 +362,18 @@ void Form1::Redraw() {
 }
 
 void Form1::SetStatus(const char *text, Color *color) {
-	if (color)
-		pLabel->SetTextColor(*color);
+	if (color) pLabel->SetTextColor(*color);
 	pLabel->SetText(text);
 	pLabel->RequestRedraw(true);
 }
 
 void Form1::ShowSoftkey(Osp::Ui::Controls::Softkey key, bool show) {
 	FormStyle delta;
-	if (key == SOFTKEY_0)
-		delta = FORM_STYLE_SOFTKEY_0;
-	else if (key == SOFTKEY_1)
-		delta = FORM_STYLE_SOFTKEY_1;
+	if (key == SOFTKEY_0) delta = FORM_STYLE_SOFTKEY_0;
+	else if (key == SOFTKEY_1) delta = FORM_STYLE_SOFTKEY_1;
 	else
 		return;
-	if (show)
-		style |= delta;
+	if (show) style |= delta;
 	else
 		style &= ~delta;
 	SetFormStyle(style);
@@ -390,8 +381,8 @@ void Form1::ShowSoftkey(Osp::Ui::Controls::Softkey key, bool show) {
 }
 
 void Form1::SocketConnected() {
-	SetOrientation(ORIENTATION_AUTOMATIC);
-	OnOrientationChanged(*this, ORIENTATION_STATUS_PORTRAIT);
+/*	SetOrientation(ORIENTATION_AUTOMATIC);
+	OnOrientationChanged(*this, ORIENTATION_STATUS_PORTRAIT);*/
 }
 
 void Form1::ConnectionActive() {
@@ -399,17 +390,18 @@ void Form1::ConnectionActive() {
 }
 
 void Form1::ConnectionStopped() {
-	SetOrientation(ORIENTATION_PORTRAIT);
-	OnOrientationChanged(*this, ORIENTATION_STATUS_PORTRAIT);
+/*	SetOrientation(ORIENTATION_PORTRAIT);
+	OnOrientationChanged(*this, ORIENTATION_STATUS_PORTRAIT);*/
 	ShowSoftkey(SOFTKEY_0, true);
 	free_backend();
 	SetStatus("Disconnected");
 }
 
 void Form1::RemoteExit() {
-	SetOrientation(ORIENTATION_PORTRAIT);
-	OnOrientationChanged(*this, ORIENTATION_STATUS_PORTRAIT);
+/*	SetOrientation(ORIENTATION_PORTRAIT);
+	OnOrientationChanged(*this, ORIENTATION_STATUS_PORTRAIT);*/
 	ShowSoftkey(SOFTKEY_0, true);
+	logerror("Host disconnected\n");
 	SetStatus("Disconnected");
 }
 
@@ -419,22 +411,19 @@ extern "C" void notify_remote_exit(void *frontend) {
 
 extern "C" void timer_change_notify(long next) {
 	long ticks = next - GETTICKCOUNT();
-	if (ticks <= 0)
-		ticks = 1;
+	if (ticks <= 0) ticks = 1;
 	mainForm->SetTimer(ticks);
 	timing_next_time = next;
 }
 
 extern "C" void term_update(Terminal *term) {
-	if (!term)
-		return;
+	if (!term) return;
 	term->window_update_pending = FALSE;
 	mainForm->Redraw();
 }
 
 extern "C" void logerror(const char *format, ...) {
-	if (!term)
-		return;
+	if (!term) return;
 	va_list list;
 	va_start(list, format);
 	char buf[2048];

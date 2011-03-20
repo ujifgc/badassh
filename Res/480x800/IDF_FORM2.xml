@@ -6,40 +6,40 @@
 
 <Scene Bversion="1.2.1.v20101224" Dversion="20100701">
     <Form id="IDF_FORM2">
-        <property BGColor="#000000" BGColorOpacity="0" Orientation="Portrait" softKey0NormalIcon="" softKey0PressedIcon="" softKey0Text="OK" softKey1NormalIcon="" softKey1PressedIcon="" softKey1Text="Back" title="Configuration" titleAlign="ALIGN_CENTER" titleIcon=""/>
-        <layout mode="Portrait" style="FORM_STYLE_TITLE||FORM_STYLE_SOFTKEY_0|FORM_STYLE_SOFTKEY_1"/>
-        <layout mode="Landscape" style="FORM_STYLE_TITLE||FORM_STYLE_SOFTKEY_0|FORM_STYLE_SOFTKEY_1"/>
+        <property BGColor="#000000" BGColorOpacity="0" Orientation="Automatic" softKey0NormalIcon="" softKey0PressedIcon="" softKey0Text="" softKey1NormalIcon="" softKey1PressedIcon="" softKey1Text="OK" title="Configuration" titleAlign="ALIGN_CENTER" titleIcon=""/>
+        <layout mode="Portrait" style="FORM_STYLE_TITLE||FORM_STYLE_SOFTKEY_1"/>
+        <layout mode="Landscape" style="FORM_STYLE_TITLE||FORM_STYLE_SOFTKEY_1"/>
     </Form>
     <ScrollPanel id="IDC_SCROLLPANEL1" parent="IDF_FORM2">
         <property BGColor="" BGColorOpacity="0" panelId="IDN_PANEL1"/>
-        <panelLayout height="800" mode="Portrait" width="480" x="90" y="101"/>
-        <panelLayout height="137" mode="Landscape" width="333" x="0" y="0"/>
+        <panelLayout height="800" mode="Portrait" width="480" x="57" y="3"/>
+        <panelLayout height="530" mode="Landscape" width="800" x="16" y="4"/>
         <layout height="754" mode="Portrait" width="480" x="0" y="0"/>
-        <layout height="37" mode="Landscape" width="333" x="300" y="50"/>
+        <layout height="434" mode="Landscape" width="800" x="0" y="0"/>
     </ScrollPanel>
     <EditField id="IDPC_EDITFIELD1" parent="IDC_SCROLLPANEL1">
         <property GroupStyle="GROUP_STYLE_TOP" InputStyle="INPUT_STYLE_OVERLAY" KeypadEnabled="TRUE" LimitLength="1000" bShowTitleText="TRUE" guideText="" text="" titleText="Hostname or IP address"/>
         <layout height="106" mode="Portrait" style="EDIT_FIELD_STYLE_URL" width="480" x="0" y="0"/>
-        <layout height="80" mode="Landscape" style="EDIT_FIELD_STYLE_URL" width="266" x="67" y="57"/>
+        <layout height="106" mode="Landscape" style="EDIT_FIELD_STYLE_URL" width="800" x="0" y="0"/>
     </EditField>
     <EditField id="IDPC_EDITFIELD2" parent="IDC_SCROLLPANEL1">
         <property GroupStyle="GROUP_STYLE_MIDDLE" InputStyle="INPUT_STYLE_OVERLAY" KeypadEnabled="TRUE" LimitLength="1000" bShowTitleText="TRUE" guideText="" text="" titleText="Username (optional)"/>
         <layout height="106" mode="Portrait" style="EDIT_FIELD_STYLE_NORMAL" width="480" x="0" y="212"/>
-        <layout height="80" mode="Landscape" style="EDIT_FIELD_STYLE_NORMAL" width="266" x="67" y="57"/>
+        <layout height="106" mode="Landscape" style="EDIT_FIELD_STYLE_NORMAL" width="800" x="0" y="212"/>
     </EditField>
     <EditField id="IDPC_EDITFIELD3" parent="IDC_SCROLLPANEL1">
         <property GroupStyle="GROUP_STYLE_MIDDLE" InputStyle="INPUT_STYLE_OVERLAY" KeypadEnabled="TRUE" LimitLength="1000" bShowTitleText="TRUE" guideText="" text="" titleText="Port number (default:22)"/>
         <layout height="106" mode="Portrait" style="EDIT_FIELD_STYLE_NORMAL" width="480" x="0" y="106"/>
-        <layout height="80" mode="Landscape" style="EDIT_FIELD_STYLE_NORMAL" width="266" x="67" y="57"/>
+        <layout height="106" mode="Landscape" style="EDIT_FIELD_STYLE_NORMAL" width="800" x="0" y="106"/>
     </EditField>
     <Slider id="IDPC_SLIDER1" parent="IDC_SCROLLPANEL1">
         <property BGColor="" BackgroundStyle="BACKGROUND_STYLE_DEFAULT" GroupStyle="GROUP_STYLE_BOTTOM" bShowTitleText="TRUE" colorOfTitleText="" leftIconBitmapPath="" max="30" min="10" rightIconBitmapPath="" titleText="Font size" value="30"/>
         <layout height="106" mode="Portrait" width="480" x="0" y="424"/>
-        <layout height="90" mode="Landscape" width="333" x="0" y="47"/>
+        <layout height="106" mode="Landscape" width="800" x="0" y="424"/>
     </Slider>
     <EditField id="IDPC_EDITFIELD4" parent="IDC_SCROLLPANEL1">
         <property GroupStyle="GROUP_STYLE_MIDDLE" InputStyle="INPUT_STYLE_OVERLAY" KeypadEnabled="TRUE" LimitLength="1000" bShowTitleText="TRUE" guideText="" text="" titleText="Public keyfile (optional)"/>
         <layout height="106" mode="Portrait" style="EDIT_FIELD_STYLE_NORMAL" width="480" x="0" y="318"/>
-        <layout height="80" mode="Landscape" style="EDIT_FIELD_STYLE_NORMAL" width="266" x="67" y="57"/>
+        <layout height="106" mode="Landscape" style="EDIT_FIELD_STYLE_NORMAL" width="800" x="0" y="318"/>
     </EditField>
 </Scene>

@@ -38,9 +38,7 @@ result Form2::OnInitializing(void) {
 
 	AddKeyEventListener(*this);
 
-	SetSoftkeyActionId(SOFTKEY_0, ID_SOFTKEY0);
 	SetSoftkeyActionId(SOFTKEY_1, ID_SOFTKEY1);
-	AddSoftkeyActionListener(SOFTKEY_0, *this);
 	AddSoftkeyActionListener(SOFTKEY_1, *this);
 
 	pScroll = static_cast<ScrollPanel *> (GetControl(L"IDC_SCROLLPANEL1"));
@@ -83,14 +81,8 @@ result Form2::OnTerminating(void) {
 
 void Form2::OnActionPerformed(const Osp::Ui::Control& source, int actionId) {
 	switch (actionId) {
-	case ID_SOFTKEY0:
-		SaveConfig();
-		mainFrame->SetCurrentForm(*mainForm);
-		mainForm->Redraw();
-		mainForm->Draw();
-		mainForm->Show();
-		break;
 	case ID_SOFTKEY1:
+		SaveConfig();
 		mainFrame->SetCurrentForm(*mainForm);
 		mainForm->Redraw();
 		mainForm->Draw();
