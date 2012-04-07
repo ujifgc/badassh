@@ -4,3 +4,32 @@ Free version features:
 - Supports 3DES, AES, Arcfour, Blowfish, DES
 - Public-key authentication support
 - Emulates most xterm control sequences
+
+Builer's hints:
+
+1. Here's manifest of privileges required by badassh (hiding app Id and Secret):
+
+<?xml version='1.0' ?>
+<Manifest>
+    <Id>XXX</Id>
+    <Secret>XXX</Secret>
+  <AppVersion>12.4.0</AppVersion>
+  <ManifestVersion>1.2</ManifestVersion>
+  <AppType>C++App</AppType>
+    <Privileges>
+        <Privilege>
+            <Name>NET</Name>
+        </Privilege>
+        <Privilege>
+            <Name>SOCKET</Name>
+        </Privilege>
+        <Privilege>
+            <Name>WIFI</Name>
+        </Privilege>
+    </Privileges>
+    <DeviceProfile>
+        <APIVersion>2.0</APIVersion>
+    </DeviceProfile>
+</Manifest>
+
+2. Before building this app ensure that __BADA__ is #defined in project properties.
