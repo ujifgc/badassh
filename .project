@@ -69,6 +69,12 @@
 		</buildCommand>
 		<buildCommand>
 			<name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
+			<triggers>full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>com.osp.fasoo.propertiesFileAuditor</name>
 			<arguments>
 			</arguments>
 		</buildCommand>

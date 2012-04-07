@@ -10,7 +10,7 @@ int ftruncate(int, int);
 int GETTICKCOUNT();
 
 int sscanf(const char *text, const char *fmt, ...);
-int sprintf(const char *text, const char *fmt, ...);
+//int sprintf(const char *text, const char *fmt, ...);
 
 int bada_Rename(const char *text, const char *fmt);
 

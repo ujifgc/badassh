@@ -2,23 +2,29 @@
 <Application>
     <Entry>SSHBada</Entry>
     <Name>
-        <English>SSH client</English>
-        <rus-RU>SSH клиент</rus-RU>
+        <English>SSHBada</English>
     </Name>
     <Vendor>ujifgc</Vendor>
-    <Description/>
+    <Description>SSH client application for bada platform</Description>
     <Icons>
-        <MainMenu>badassh.png<Type1>badassh.png</Type1>
+        <MainMenu>badassh80.png<Type1>badassh80.png</Type1>
             <Type2/>
+            <Type3/>
+            <Type4/>
+            <Type5/>
         </MainMenu>
         <Setting/>
         <Ticker/>
         <QuickPanel/>
         <LaunchImage>Splash.png<Type1>Splash.png</Type1>
             <Type2/>
+            <Type3/>
+            <Type4/>
+            <Type5/>
         </LaunchImage>
     </Icons>
     <AutoScaling>
         <Enabled>false</Enabled>
     </AutoScaling>
+    <Multitasking>true</Multitasking>
 </Application>
